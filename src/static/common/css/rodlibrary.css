@@ -39,30 +39,30 @@ body {
     color: var(--uni-dark);
 }
 
+/* Heading colours are left to each theme so text on image banners
+   (e.g. the current-issue hero) stays readable. */
 h1, .h1 {
     font-family: var(--uni-font-display);
-    color: var(--uni-dark);
 }
 
 h2, h3, h4, h5, h6,
 .h2, .h3, .h4, .h5, .h6 {
     font-family: var(--uni-font-sans);
     font-weight: 700;
-    color: var(--uni-dark);
 }
 
-main a,
-#main-content a,
-.wrapper a {
+/* Links inside running text: dark purple with a gold underline, as on
+   library.uni.edu. Other links keep theme colours (e.g. white on banners). */
+main p a,
+#main-content p a {
     color: var(--uni-dark);
     text-decoration: underline;
     text-decoration-color: var(--uni-secondary);
     text-underline-offset: 0.15em;
 }
 
-main a:hover, main a:focus,
-#main-content a:hover, #main-content a:focus,
-.wrapper a:hover, .wrapper a:focus {
+main p a:hover, main p a:focus,
+#main-content p a:hover, #main-content p a:focus {
     color: var(--uni-primary);
 }
 
@@ -115,33 +115,28 @@ input[type="submit"]:hover, input[type="submit"]:focus {
 }
 
 /* Keep links that are styled as buttons readable */
-main a.button, main a.btn, #main-content a.button, #main-content a.btn,
-.wrapper a.button, .wrapper a.btn {
+main a.button, main a.btn, #main-content a.button, #main-content a.btn {
     color: #fff;
     text-decoration: none;
 }
 
 /* ---------- Header / navigation ---------- */
 
-/* OLH theme (Foundation) */
-.main-header,
-.main-header .top-bar,
-.main-header .top-bar ul,
-.main-header .title-bar {
-    background-color: var(--uni-primary);
+/* OLH theme (Foundation): white header like library.uni.edu's top bar,
+   with a gold rule and purple link accents */
+.main-header {
+    border-bottom: 4px solid var(--uni-secondary);
 }
-.main-header .top-bar a,
-.main-header .top-bar .menu-text,
-.main-header .top-bar button {
-    color: #fff;
+.main-header a,
+.main-header .menu-text {
+    color: var(--uni-dark);
+    text-decoration: none;
 }
-.main-header .top-bar .is-dropdown-submenu,
-.main-header .top-bar .is-dropdown-submenu ul {
-    background-color: var(--uni-dark);
-}
-.main-header .top-bar a:hover,
-.main-header .top-bar a:focus {
-    color: var(--uni-secondary);
+.main-header a:hover,
+.main-header a:focus {
+    color: var(--uni-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--uni-secondary);
 }
 
 /* clean theme (Bootstrap) */
@@ -302,6 +297,29 @@ nav.header-overrides a:focus {
     gap: 0.5rem 1.25rem;
 }
 
-/* Neutralise theme footer rules that would leak in */
+/* Neutralise theme rules that would leak in (e.g. Materialize styles every
+   <nav> as a 64px-high bar and floats its list items) */
+.uni-footer nav {
+    height: auto;
+    line-height: inherit;
+    background: none;
+    box-shadow: none;
+    width: auto;
+}
+.uni-footer nav ul li,
+.uni-footer ul li {
+    float: none;
+    line-height: inherit;
+}
+.uni-footer nav ul a {
+    display: inline;
+    padding: 0;
+    font-size: inherit;
+    height: auto;
+    line-height: inherit;
+}
+.uni-footer nav ul a:hover {
+    background: none;
+}
 .uni-footer p { margin: 0 0 0.5rem; color: inherit; }
 .uni-footer .row, .uni-footer .columns { float: none; }
