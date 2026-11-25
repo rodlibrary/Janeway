@@ -81,6 +81,8 @@ src/core/settings.py
 mydatabase
 node_modules/
 src/plugins/*
+# Rod Library plugins kept in this repository
+!src/plugins/downloads_by_country/
 src/media/profile_images/*
 
 # PyCharm
