@@ -19,6 +19,7 @@
     <link rel="sitemap" type="application/xml" title="Sitemap" href="{% url 'website_sitemap' %}">
     <link href="{% static "OLH/css/app.css" %}" rel="stylesheet">
     <link href="{% static "common/css/index.css" %}" rel="stylesheet">
+    <link href="{% static "common/css/rodlibrary.css" %}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
 
     {% if request.journal %}
@@ -217,6 +218,7 @@
         {% include "press/elements/press_footer.html" %}
         {% endif %}
 </footer>
+{% include "common/elements/rodlibrary_footer.html" %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.5.1/js/foundation.min.js"></script>
 <script src="{% static "OLH/js/app.min.js" %}"></script>
