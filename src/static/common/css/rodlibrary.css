@@ -196,7 +196,14 @@ nav.header-overrides a:focus {
 
 /* ---------- Rod Library footer ---------- */
 
+/* Footer colours: change these three values to restyle the whole footer */
 .uni-footer {
+    --uni-footer-bg: #2e1a47;
+    --uni-footer-text: #ffffff;
+    --uni-footer-link: #ffb500;
+
+    background-color: var(--uni-footer-bg);
+    color: var(--uni-footer-text);
     font-family: var(--uni-font-sans);
     font-size: 1rem;
     line-height: 1.5;
@@ -204,11 +211,20 @@ nav.header-overrides a:focus {
     clear: both;
 }
 
-.uni-footer a {
+.uni-footer .uni-footer__heading,
+.uni-footer address,
+.uni-footer p {
+    color: var(--uni-footer-text);
+}
+
+.uni-footer a,
+.uni-footer a:visited {
+    color: var(--uni-footer-link);
     text-decoration: none;
 }
 .uni-footer a:hover,
 .uni-footer a:focus {
+    color: var(--uni-footer-link);
     text-decoration: underline;
 }
 
@@ -257,34 +273,9 @@ nav.header-overrides a:focus {
     gap: 0.5rem 1rem;
 }
 
-/* Library block: light "Dome" band */
-.uni-footer__library {
-    background-color: var(--uni-light);
-    color: var(--uni-dark);
-    border-top: 6px solid var(--uni-secondary);
-}
-.uni-footer__library a,
-.uni-footer__library .uni-footer__heading {
-    color: var(--uni-dark);
-}
-.uni-footer__library a:hover,
-.uni-footer__library a:focus {
-    color: var(--uni-primary);
-}
-
-/* University block: purple gradient */
+/* Separator between the library and university blocks */
 .uni-footer__university {
-    background: var(--uni-dark);
-    background-image: var(--uni-gradient);
-    color: #fff;
-}
-.uni-footer__university a,
-.uni-footer__university .uni-footer__heading {
-    color: #fff;
-}
-.uni-footer__university a:hover,
-.uni-footer__university a:focus {
-    color: var(--uni-secondary);
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .uni-footer__logo img {
