@@ -29,6 +29,7 @@
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/@materializecss/materialize@1.2.2/dist/css/materialize.min.css">
     <link rel="stylesheet" href="{% static "material/mat.css" %}">
+    <link href="{% static "common/css/rodlibrary.css" %}" rel="stylesheet">
 
     {% if request.journal %}
         <link href="{% static "material/css/journal" %}{{ request.journal.id }}_override.css" rel="stylesheet">
@@ -75,6 +76,7 @@
         </div>
     </div>
 </footer>
+{% include "common/elements/rodlibrary_footer.html" %}
 
 
 <!--  Scripts-->

@@ -27,6 +27,7 @@
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
           integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link href="{% static "clean/css/clean.css" %}" rel="stylesheet">
+    <link href="{% static "common/css/rodlibrary.css" %}" rel="stylesheet">
     {% if request.journal %}
         <link href="{% static "clean/css/journal" %}{{ request.journal.id }}_override.css" rel="stylesheet">
     {% endif %}
@@ -90,6 +91,7 @@
     <footer class="site-footer" id="footer">
       {% include "core/footer.html" %}
     </footer>
+    {% include "common/elements/rodlibrary_footer.html" %}
 </div>
 {% include "common/elements/analytics.html" %}
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"

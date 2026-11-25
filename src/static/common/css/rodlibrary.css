@@ -1,0 +1,316 @@
+/*
+ * Rod Library / University of Northern Iowa styling for Janeway.
+ *
+ * Colour tokens and typography mirror the library.uni.edu "octothorpe"
+ * theme (library.uni.edu/themes/custom/octothorpe/css/style.css) and the
+ * UNI brand palette (ur.uni.edu/uni-brand/visual-identity/colors).
+ *
+ * Loaded by the OLH, clean and material themes after the theme stylesheet
+ * and before any press/journal override CSS, so per-journal overrides
+ * still win.
+ *
+ * Fonts: library.uni.edu uses Adobe Fonts (proxima-nova, Blacker Pro).
+ * Those need UNI's Adobe Fonts kit; add the kit <link> in each theme's
+ * base.html if you have one. Until then the fallback stacks below apply.
+ */
+
+:root {
+    --uni-primary: #500778;   /* Panther Purple */
+    --uni-secondary: #ffb500; /* Goldenrod */
+    --uni-dark: #2e1a47;      /* Campaniling */
+    --uni-light: #f0eef1;     /* Dome */
+    --uni-accent1: #46a09a;   /* Fountain */
+    --uni-accent2: #ac4fc6;   /* Spring Blossom */
+    --uni-accent3a: #c6dae7;  /* Prexy's Pond */
+    --uni-accent3b: #ebf2f7;
+    --uni-accent6: #a884bc;   /* Dawn */
+    --uni-gray1: #737373;
+    --uni-gray2: #f7f6f7;
+    --uni-gray3: #cccccc;
+    --uni-gradient: linear-gradient(90deg, #2f044d 0%, #46066b 100%);
+    --uni-font-sans: "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --uni-font-display: "BlackerProDis-ExBd", "Blacker Pro", Georgia, "Times New Roman", serif;
+}
+
+/* ---------- Base typography & links ---------- */
+
+body {
+    font-family: var(--uni-font-sans);
+    color: var(--uni-dark);
+}
+
+h1, .h1 {
+    font-family: var(--uni-font-display);
+    color: var(--uni-dark);
+}
+
+h2, h3, h4, h5, h6,
+.h2, .h3, .h4, .h5, .h6 {
+    font-family: var(--uni-font-sans);
+    font-weight: 700;
+    color: var(--uni-dark);
+}
+
+main a,
+#main-content a,
+.wrapper a {
+    color: var(--uni-dark);
+    text-decoration: underline;
+    text-decoration-color: var(--uni-secondary);
+    text-underline-offset: 0.15em;
+}
+
+main a:hover, main a:focus,
+#main-content a:hover, #main-content a:focus,
+.wrapper a:hover, .wrapper a:focus {
+    color: var(--uni-primary);
+}
+
+a:focus-visible,
+button:focus-visible {
+    outline: 3px solid var(--uni-secondary);
+    outline-offset: 2px;
+}
+
+hr {
+    border-color: var(--uni-primary);
+}
+
+th {
+    background-color: var(--uni-primary);
+    color: #fff;
+}
+
+tbody tr:nth-child(even) {
+    background-color: var(--uni-light);
+}
+
+/* ---------- Buttons ---------- */
+
+.button,
+.btn-primary,
+.btn.btn-primary,
+input[type="submit"] {
+    background-color: var(--uni-primary);
+    border-color: var(--uni-primary);
+    color: #fff;
+    font-family: var(--uni-font-sans);
+    font-weight: 700;
+}
+
+.button:hover, .button:focus,
+.btn-primary:hover, .btn-primary:focus,
+input[type="submit"]:hover, input[type="submit"]:focus {
+    background-color: var(--uni-dark);
+    border-color: var(--uni-dark);
+    color: #fff;
+}
+
+/* Material theme buttons */
+.btn, .btn-large, .btn-small {
+    background-color: var(--uni-primary);
+}
+.btn:hover, .btn-large:hover, .btn-small:hover {
+    background-color: var(--uni-dark);
+}
+
+/* Keep links that are styled as buttons readable */
+main a.button, main a.btn, #main-content a.button, #main-content a.btn,
+.wrapper a.button, .wrapper a.btn {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* ---------- Header / navigation ---------- */
+
+/* OLH theme (Foundation) */
+.main-header,
+.main-header .top-bar,
+.main-header .top-bar ul,
+.main-header .title-bar {
+    background-color: var(--uni-primary);
+}
+.main-header .top-bar a,
+.main-header .top-bar .menu-text,
+.main-header .top-bar button {
+    color: #fff;
+}
+.main-header .top-bar .is-dropdown-submenu,
+.main-header .top-bar .is-dropdown-submenu ul {
+    background-color: var(--uni-dark);
+}
+.main-header .top-bar a:hover,
+.main-header .top-bar a:focus {
+    color: var(--uni-secondary);
+}
+
+/* clean theme (Bootstrap) */
+.navbar-custom {
+    background-color: var(--uni-primary) !important;
+}
+.navbar-custom .nav-link,
+.navbar-custom .dropdown-button {
+    color: #fff !important;
+}
+.navbar-custom .nav-link:hover,
+.navbar-custom .nav-link:focus,
+.navbar-custom .nav-item.active .nav-link {
+    color: var(--uni-secondary) !important;
+}
+.navbar-custom .dropdown-menu {
+    background-color: var(--uni-dark);
+}
+.navbar-custom .dropdown-menu .dropdown-item {
+    color: #fff;
+}
+.navbar-custom .dropdown-menu .dropdown-item:hover,
+.navbar-custom .dropdown-menu .dropdown-item:focus {
+    background-color: var(--uni-primary);
+    color: var(--uni-secondary);
+}
+
+/* material theme */
+nav.header-overrides,
+nav.header-overrides .nav-wrapper {
+    background-color: var(--uni-primary);
+}
+nav.header-overrides a {
+    color: #fff;
+}
+nav.header-overrides a:hover,
+nav.header-overrides a:focus {
+    color: var(--uni-secondary);
+}
+
+/* Breadcrumbs, matching library.uni.edu's dark purple bar */
+.breadcrumbs, .breadcrumb {
+    background-color: var(--uni-dark);
+    padding: 0.5rem 1rem;
+}
+.breadcrumbs a, .breadcrumb a, .breadcrumb-item + .breadcrumb-item::before {
+    color: var(--uni-secondary) !important;
+}
+.breadcrumbs li, .breadcrumb-item.active {
+    color: #fff;
+}
+
+/* ---------- Rod Library footer ---------- */
+
+.uni-footer {
+    font-family: var(--uni-font-sans);
+    font-size: 1rem;
+    line-height: 1.5;
+    width: 100%;
+    clear: both;
+}
+
+.uni-footer a {
+    text-decoration: none;
+}
+.uni-footer a:hover,
+.uni-footer a:focus {
+    text-decoration: underline;
+}
+
+.uni-footer ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.uni-footer__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+    .uni-footer__inner {
+        grid-template-columns: 1.2fr 1fr 1fr;
+    }
+}
+
+.uni-footer__heading {
+    font-family: var(--uni-font-sans);
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+    letter-spacing: 0.02em;
+}
+
+.uni-footer address {
+    font-style: normal;
+    margin: 0 0 0.75rem;
+}
+
+.uni-footer__links li,
+.uni-footer__social li {
+    margin-bottom: 0.4rem;
+}
+
+.uni-footer__social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+}
+
+/* Library block: light "Dome" band */
+.uni-footer__library {
+    background-color: var(--uni-light);
+    color: var(--uni-dark);
+    border-top: 6px solid var(--uni-secondary);
+}
+.uni-footer__library a,
+.uni-footer__library .uni-footer__heading {
+    color: var(--uni-dark);
+}
+.uni-footer__library a:hover,
+.uni-footer__library a:focus {
+    color: var(--uni-primary);
+}
+
+/* University block: purple gradient */
+.uni-footer__university {
+    background: var(--uni-dark);
+    background-image: var(--uni-gradient);
+    color: #fff;
+}
+.uni-footer__university a,
+.uni-footer__university .uni-footer__heading {
+    color: #fff;
+}
+.uni-footer__university a:hover,
+.uni-footer__university a:focus {
+    color: var(--uni-secondary);
+}
+
+.uni-footer__logo img {
+    max-width: 220px;
+    height: auto;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.uni-footer__legal {
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.25rem 1.5rem 2rem;
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    justify-content: space-between;
+}
+.uni-footer__legal ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+}
+
+/* Neutralise theme footer rules that would leak in */
+.uni-footer p { margin: 0 0 0.5rem; color: inherit; }
+.uni-footer .row, .uni-footer .columns { float: none; }
