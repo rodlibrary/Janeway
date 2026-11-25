@@ -1,0 +1,185 @@
+{% extends "admin/core/base.html" %}
+{% load humanize %}
+
+{% block title %}{{ measure_label }} by Country{% endblock %}
+{% block title-section %}{{ measure_label }} by Country{% endblock %}
+{% block title-sub %}
+    Where readers of
+    {% if article %}“{{ article.title }}”{% elif journal %}{{ journal.name }}{% else %}all journals{% endif %}
+    are, {{ start_date|date:"j M Y" }} to {{ end_date|date:"j M Y" }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li><a href="{% url 'core_manager_index' %}">Manager</a></li>
+    <li>{{ measure_label }} by Country</li>
+{% endblock %}
+
+{% block css %}
+<style>
+    .dbc-filters { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; align-items: flex-end; }
+    .dbc-filters label { margin: 0; font-size: 0.875rem; }
+    .dbc-filters input, .dbc-filters select { margin: 0.25rem 0 0; min-width: 9rem; }
+    .dbc-filters .dbc-article select { max-width: 28rem; }
+    .dbc-filters .button { margin: 0; }
+    .dbc-actions { margin-left: auto; display: flex; gap: 0.5rem; }
+
+    .dbc-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+    .dbc-stat { background: #fff; border: 1px solid #e0e0e0; border-radius: 4px; padding: 1rem 1.25rem; }
+    .dbc-stat .dbc-value { font-size: 2rem; font-weight: 700; line-height: 1.1; color: #2e1a47; display: block; }
+    .dbc-stat .dbc-label { font-size: 0.875rem; color: #555; }
+
+    .dbc-map-wrap { position: relative; }
+    .dbc-map { width: 100%; height: auto; display: block; }
+    .dbc-map path { stroke: #fff; stroke-width: 0.5; vector-effect: non-scaling-stroke; }
+    .dbc-map circle { stroke: #fff; stroke-width: 1.5; }
+    .dbc-map path:hover, .dbc-map circle:hover { stroke: #2e1a47; stroke-width: 1.5; }
+    .dbc-tooltip { position: absolute; pointer-events: none; background: #fff; border: 1px solid #ccc;
+        border-radius: 4px; padding: 0.35rem 0.6rem; font-size: 0.875rem; box-shadow: 0 2px 6px rgba(0,0,0,.15);
+        white-space: nowrap; display: none; }
+    .dbc-tooltip strong { display: block; font-size: 1rem; }
+
+    .dbc-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 1rem; margin-top: 0.75rem; font-size: 0.875rem; }
+    .dbc-legend .dbc-key { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .dbc-legend .dbc-swatch { width: 1.25rem; height: 0.75rem; border-radius: 2px; display: inline-block; }
+    .dbc-note { font-size: 0.8125rem; color: #555; margin: 0.75rem 0 0; }
+    td.dbc-num, th.dbc-num { text-align: right; font-variant-numeric: tabular-nums; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="box">
+    <div class="content">
+        <form method="GET" class="dbc-filters" aria-label="Filters">
+            <div><label for="{{ form.start_date.id_for_label }}">{{ form.start_date.label }}</label>{{ form.start_date }}</div>
+            <div><label for="{{ form.end_date.id_for_label }}">{{ form.end_date.label }}</label>{{ form.end_date }}</div>
+            <div><label for="{{ form.measure.id_for_label }}">{{ form.measure.label }}</label>{{ form.measure }}</div>
+            {% if form.journal %}<div><label for="{{ form.journal.id_for_label }}">{{ form.journal.label }}</label>{{ form.journal }}</div>{% endif %}
+            {% if form.article %}<div class="dbc-article"><label for="{{ form.article.id_for_label }}">{{ form.article.label }}</label>{{ form.article }}</div>{% endif %}
+            <div><button type="submit" class="button">Apply</button></div>
+            <div class="dbc-actions">
+                <a class="button secondary" href="?{{ export_query }}"><i class="fa fa-download" aria-hidden="true"></i> Export CSV</a>
+            </div>
+        </form>
+        {% if form.non_field_errors or form.errors %}
+            <div class="callout alert" role="alert">{{ form.non_field_errors|default:"Some filters were invalid, so the default last 12 months are shown." }}</div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="dbc-stats">
+    <div class="dbc-stat"><span class="dbc-value">{{ total|intcomma }}</span><span class="dbc-label">{{ measure_label }} in this period</span></div>
+    <div class="dbc-stat"><span class="dbc-value">{{ rows|length }}</span><span class="dbc-label">Countries</span></div>
+    <div class="dbc-stat">
+        <span class="dbc-value">{% if top %}{{ top.share }}%{% else %}–{% endif %}</span>
+        <span class="dbc-label">{% if top %}from {{ top.name }}, the top country{% else %}No top country yet{% endif %}</span>
+    </div>
+    <div class="dbc-stat"><span class="dbc-value">{{ unknown|intcomma }}</span><span class="dbc-label">From an unknown location ({{ unknown_share }}%)</span></div>
+</div>
+
+<div class="box">
+    <div class="title-area"><h2>Map</h2></div>
+    <div class="content">
+        <div class="dbc-map-wrap">
+            <svg class="dbc-map" viewBox="0 0 {{ map.width }} {{ map.height }}" role="img"
+                 aria-label="World map shaded by {{ measure_noun }} per country. The same figures are in the table below.">
+                {% for shape in map.shapes %}<path d="{{ shape.d }}" fill="{{ shape.colour }}" data-name="{{ shape.name }}" data-count="{{ shape.count }}"><title>{{ shape.label }}</title></path>{% endfor %}
+                {% for dot in map.dots %}{% if dot.count %}<circle cx="{{ dot.x }}" cy="{{ dot.y }}" r="4" fill="{{ dot.colour }}" data-name="{{ dot.name }}" data-count="{{ dot.count }}"><title>{{ dot.label }}</title></circle>{% endif %}{% endfor %}
+            </svg>
+            <div class="dbc-tooltip" id="dbc-tooltip" role="presentation"></div>
+        </div>
+        <div class="dbc-legend" aria-label="Legend">
+            <strong>{{ measure_label }}</strong>
+            <span class="dbc-key"><span class="dbc-swatch" style="background: {{ map.no_data_colour }}"></span> None</span>
+            {% for band in map.scale %}
+                <span class="dbc-key"><span class="dbc-swatch" style="background: {{ band.colour }}"></span> {{ band.label }}</span>
+            {% endfor %}
+        </div>
+        <p class="dbc-note">
+            Small countries are shown as dots. Locations come from each reader's IP address and are country-level only.
+            Bots are excluded, and repeat {{ measure_noun }} of the same article by the same reader within an hour count once.
+        </p>
+    </div>
+</div>
+
+<div class="box">
+    <div class="title-area"><h2>By country</h2></div>
+    <div class="content">
+        {% if rows or unknown %}
+        <table id="dbc-table" class="scroll">
+            <thead>
+                <tr>
+                    <th class="dbc-num">Rank</th>
+                    <th>Country</th>
+                    <th class="dbc-num">{{ measure_label }}</th>
+                    <th class="dbc-num">Share</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    <td class="dbc-num">{{ row.rank }}</td>
+                    <td>{{ row.name }}</td>
+                    <td class="dbc-num" data-order="{{ row.count }}">{{ row.count|intcomma }}</td>
+                    <td class="dbc-num" data-order="{{ row.share }}">{{ row.share }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                {% if unknown %}
+                <tr>
+                    <td class="dbc-num">–</td>
+                    <td>Unknown location</td>
+                    <td class="dbc-num">{{ unknown|intcomma }}</td>
+                    <td class="dbc-num">{{ unknown_share }}%</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th></th>
+                    <th>Total</th>
+                    <th class="dbc-num">{{ total|intcomma }}</th>
+                    <th class="dbc-num">100%</th>
+                </tr>
+            </tfoot>
+        </table>
+        {% else %}
+            <p>No {{ measure_noun }} were recorded for these filters.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+{% if rows or unknown %}{% include "elements/datatables.html" with target="#dbc-table" sort=2 order="desc" %}{% endif %}
+<script>
+(function () {
+    var svg = document.querySelector(".dbc-map");
+    var tip = document.getElementById("dbc-tooltip");
+    if (!svg || !tip) { return; }
+    var noun = "{{ measure_noun|escapejs }}";
+    function show(evt) {
+        var el = evt.target;
+        if (!el.dataset || !el.dataset.name) { return; }
+        var count = Number(el.dataset.count);
+        tip.textContent = "";
+        var value = document.createElement("strong");
+        value.textContent = count.toLocaleString() + " " + (count === 1 ? noun.replace(/s$/, "") : noun);
+        tip.appendChild(value);
+        tip.appendChild(document.createTextNode(el.dataset.name));
+        var box = svg.parentNode.getBoundingClientRect();
+        tip.style.display = "block";
+        var x = evt.clientX - box.left + 12, y = evt.clientY - box.top + 12;
+        if (x + tip.offsetWidth > box.width) { x = evt.clientX - box.left - tip.offsetWidth - 12; }
+        tip.style.left = x + "px";
+        tip.style.top = y + "px";
+    }
+    svg.addEventListener("pointermove", show);
+    svg.addEventListener("pointerleave", function () { tip.style.display = "none"; });
+    // Swap native <title> tooltips (which would duplicate ours) for aria-labels.
+    svg.querySelectorAll("path > title, circle > title").forEach(function (t) {
+        t.parentNode.setAttribute("aria-label", t.textContent);
+        t.parentNode.removeChild(t);
+    });
+})();
+</script>
+{% endblock %}

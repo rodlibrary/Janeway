@@ -10,6 +10,7 @@ Rod Library's version adds the [library.uni.edu](https://library.uni.edu/) look 
 - `src/templates/common/elements/rodlibrary_footer.html`: the Rod Library and UNI footer
 - `src/static/common/img/UNI-site-logo.png`: the UNI footer logo
 - `docs/mockups/rodlibrary/`: [screenshots of every public page](docs/mockups/rodlibrary/README.md) in each theme
+- `src/plugins/downloads_by_country/`: a [Downloads by Country](src/plugins/downloads_by_country/README.md) page with a world map of where readers are
 
 ## Contents
 
@@ -115,6 +116,10 @@ After changing static files on the server, run `python3 manage.py collectstatic`
 - **Add an account:** **Manager → Enrol Users** to give a role to someone who already has an account, or **Manager → Add user** (`/<journal>/manager/user/add/`) to create a new account.
 - **Change roles:** **Manager → Enrolled Users**, then edit the person's roles.
 - **People can register themselves** at `/<journal>/register/step/1/`. New accounts start with the Author role only.
+
+### Usage by country
+
+Editors and Journal Managers can see where readers are in the back office under **Downloads by Country**. It shows a world map, a table and a CSV export, filtered by date, article, and downloads or views. Staff can also see every journal together at `https://<site>/plugins/downloads-by-country/`. Run `python3 manage.py install_plugins` once on each server to enable it. See the [plugin README](src/plugins/downloads_by_country/README.md) for details.
 
 ### Routine maintenance
 
